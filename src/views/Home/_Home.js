@@ -1,4 +1,6 @@
 // @vue/component
+import {initMenu} from "@/utils/menus";
+
 export default {
     name: 'Home',
 
@@ -20,6 +22,6 @@ export default {
     },
 
     methods: {
-
+        // this.initMenu();
     }
 }

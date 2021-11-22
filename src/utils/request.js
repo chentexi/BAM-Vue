@@ -1,7 +1,7 @@
 import axios from 'axios'
 import router from '@/router/routers'
 import { Notification } from 'element-ui'
-import store from '../store'
+import store from '../store/store'
 import { getToken } from '@/utils/auth'
 import Config from '@/settings'
 import Cookies from 'js-cookie'

@@ -5,7 +5,7 @@ import router from './router'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import UUID from "vue-uuid"
-import store from './store'
+import store from './store/store'
 
 
 Vue.config.productionTip = false

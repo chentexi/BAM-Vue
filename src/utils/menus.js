@@ -42,18 +42,12 @@ export const formatRoutes = (routes, childflag) => {
             icon: icon,
             children: children,
             component(resolve) {
-                require(['../views/' + path + '.vue'], resolve);
-                // if (component.startsWith("Emp")) {
-                //     require(['../views/'+path+ '.vue'], resolve);
-                // } else if (component.startsWith("Per")) {
-                //     require(['../views/'+path+ '.vue'], resolve);
-                // } else if (component.startsWith("Sal")) {
-                //     require(['../views/'+path+ '.vue'], resolve);
-                // } else if (component.startsWith("Sta")) {
-                //     require(['../views/'+path+ '.vue'], resolve);
-                // } else if (component.startsWith("Sys")) {
-                //     require(['../views/'+path+ '.vue'], resolve);
-                // }
+                // require(['../views/' + path + '.vue'], resolve);
+                if (component.startsWith("system")) {
+                    require(['../views'+url+'.vue'], resolve);
+                } else if (component.startsWith("monitor")) {
+                    require(['../views'+url], resolve);
+                }
             }
         }
         fmRoutes.push(fmRouter);

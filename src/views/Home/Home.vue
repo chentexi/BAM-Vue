@@ -15,16 +15,19 @@
             </el-dropdown>
         </el-header>
         <el-container class="content">
-            <el-aside width="200px">
+            <el-aside width="200px" style="margin-left: -9px" default-active="2" class="el-menu-vertical-demo"
+                      >
                 <!--unique-opened禁止多选打开-->
-                <el-menu router>
+                <el-menu router background-color="#545c64"
+                         text-color="#fff"
+                         active-text-color="#ffd04b">
                     <el-submenu :index="index+''" v-for="(item,index) in routes" v-if="!item.hidden"
                                 :key="index">
                         <template slot="title">
                             <i :class="[item.icon]" style="margin-right:6px"></i>
                             <span>{{ item.name }}</span>
                         </template>
-                        <el-menu-item :index="children.path" v-for="(children,indexj) in item.children"
+                        <el-menu-item style="min-width: 179px" :index="children.path" v-for="(children,indexj) in item.children"
                                       :key="indexj">{{ children.name }}
                         </el-menu-item>
                     </el-submenu>
@@ -49,15 +52,10 @@
     position: fixed;
     top: 0;
   }
-  .content{
-    height: 100%;
-    //background: orange;
-    margin-top: 2.8%;
-    position: fixed;
-  }
+
 
   .homeHeader{
-    background: #949798;
+    background: #545c64;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -86,5 +84,29 @@
   .el-dropdown-link {
     display: flex;
     align-items: center;
+  }
+  //侧边
+  .content{
+    height: 100%;
+    //background: orange;
+    margin-top: 52px;
+    position: fixed;
+  }
+  .el-menu-vertical-demo::-webkit-scrollbar {
+    /*滚动条整体样式*/
+    width : 5px;  /*高宽分别对应横竖滚动条的尺寸*/
+    height: 1px;
+  }
+  .el-menu-vertical-demo::-webkit-scrollbar-thumb {
+    /*滚动条里面小方块*/
+    border-radius: 5px;
+    box-shadow   : inset 0 0 5px rgba(196, 70, 70, 0.2);
+    background   : #545c64;
+  }
+  .el-menu-vertical-demo::-webkit-scrollbar-track {
+    /*滚动条里面轨道*/
+    box-shadow   : inset 0 0 5px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    background   : #eef0f1;
   }
 </style>

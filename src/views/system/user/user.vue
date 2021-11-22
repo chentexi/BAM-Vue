@@ -1,6 +1,5 @@
 <template>
-    <div>
-        5555
+    <div class="user">
         <span>用户管理</span>
     </div>
 </template>

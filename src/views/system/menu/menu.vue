@@ -1,5 +1,7 @@
 <template>
-    <div class="menu"></div>
+    <div class="menu">
+        菜单管理
+    </div>
 </template>
 
 <script src="./_menu.js" lang="js"></script>

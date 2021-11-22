@@ -11,7 +11,9 @@ export default {
     props: {},
 
     data() {
-        return {}
+        return {
+            user:JSON.parse(window.sessionStorage.getItem('user'))
+        }
     },
 
     computed: {

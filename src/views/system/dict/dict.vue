@@ -1,5 +1,7 @@
 <template>
-    <div class="dict"></div>
+    <div class="dict">
+        字典管理
+    </div>
 </template>
 
 <script src="./_dict.js" lang="js"></script>

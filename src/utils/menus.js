@@ -42,8 +42,9 @@ export const formatRoutes = (routes, childflag) => {
             icon: icon,
             children: children,
             component(resolve) {
-                // require(['../views/' + path + '.vue'], resolve);
-                if (component.startsWith("system")) {
+                if (component.startsWith("Home")){
+                    require(['../views/Home/' + component + '.vue'], resolve);
+                }else if (component.startsWith("system")) {
                     require(['../views'+url+'.vue'], resolve);
                 } else if (component.startsWith("monitor")) {
                     require(['../views'+url], resolve);

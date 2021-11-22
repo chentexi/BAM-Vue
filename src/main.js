@@ -25,16 +25,32 @@ Vue.prototype.putRequest = putRequest;
 Vue.prototype.getRequest = getRequest;
 Vue.prototype.deleteRequest = deleteRequest;
 
-router.beforeEach((to, from, next)=>{
-  if (to.path=='/'){
-    next()
-  } else {
-    initMenu(router,store);
-    next();
-  }
+router.beforeEach((to, from, next) => {
+    console.log(to);
+    console.log(from);
+    console.log(next);
+    //token存在就跳转
+    if (window.sessionStorage.getItem('tokenStr')) {
+        initMenu(router, store);
+        if (!window.sessionStorage.getItem('user')) {
+            return getRequest('/admin/info').then(user => {
+                if (user) {
+                    window.sessionStorage.setItem('user', JSON.stringify(user))
+                    next();
+                }
+            })
+        }
+        next();
+    } else {
+        // next({ name:'Login' });
+
+        // if (to.path == '/') {
+        // }
+        next();
+    }
 })
 new Vue({
-  router,
-  store,
-  render: h => h(App)
+    router,
+    store,
+    render: h => h(App)
 }).$mount('#app')

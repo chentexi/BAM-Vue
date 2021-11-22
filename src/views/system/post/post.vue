@@ -1,5 +1,7 @@
 <template>
-    <div class="post"></div>
+    <div class="post">
+        岗位管理
+    </div>
 </template>
 
 <script src="./_post.js" lang="js"></script>

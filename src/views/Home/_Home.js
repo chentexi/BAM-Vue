@@ -14,7 +14,11 @@ export default {
         return {}
     },
 
-    computed: {},
+    computed: {
+        routes() {
+            return this.$store.state.routes;
+        }
+    },
 
     watch: {},
 

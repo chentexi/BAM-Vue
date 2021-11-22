@@ -6,11 +6,11 @@
             </el-header>
             <el-container>
                 <el-aside width="200px">
-                    <el-menu router>
-                        <el-submenu index="1" v-for="(item,index) in this.$store.state.routes" v-if="!item.hidden"
+                    <el-menu router unique-opened>
+                        <el-submenu :index="index+''" v-for="(item,index) in this.$store.state.routes" v-if="!item.hidden"
                                     :key="index">
                             <template slot="title">
-                                <i class="el-icon-location"></i>
+                                <i :class="[item.icon]"></i>
                                 <span>{{ item.name }}</span>
                             </template>
                             <el-menu-item :index="children.path" v-for="(children,indexj) in item.children"

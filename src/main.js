@@ -1,18 +1,18 @@
 import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
-// 引入ElementUI
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
-import UUID from "vue-uuid"
+import uuid from "vue-uuid"
 import store from './store/store'
 import 'font-awesome/css/font-awesome.min.css'
+import * as echarts from 'echarts'
 
 
 Vue.config.productionTip = false
 // 安装ElementUI
 Vue.use(ElementUI)
-Vue.use(UUID)
+Vue.use(uuid)
 
 import {postRequest} from "./utils/api";
 import {putRequest} from "./utils/api";
@@ -24,6 +24,7 @@ Vue.prototype.postRequest = postRequest;
 Vue.prototype.putRequest = putRequest;
 Vue.prototype.getRequest = getRequest;
 Vue.prototype.deleteRequest = deleteRequest;
+Vue.prototype.$echarts = echarts
 
 router.beforeEach((to, from, next) => {
     console.log(to);
@@ -42,11 +43,11 @@ router.beforeEach((to, from, next) => {
         }
         next();
     } else {
-        // next({ name:'Login' });
-
-        // if (to.path == '/') {
-        // }
-        next();
+        if (to.path == '/') {
+            next();
+        } else {
+            next('/?redirect=' + to.path);
+        }
     }
 })
 new Vue({

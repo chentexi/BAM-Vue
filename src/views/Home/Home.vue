@@ -1,6 +1,6 @@
 <template>
     <el-container>
-        <el-header  class="homeHeader nav">
+        <el-header class="homeHeader nav">
             <div class="title">后台管理系统</div>
             <el-dropdown class="userInfo">
                   <span class="el-dropdown-link">
@@ -10,15 +10,15 @@
                 <el-dropdown-menu slot="dropdown">
                     <el-dropdown-item>个人中心</el-dropdown-item>
                     <el-dropdown-item>设置</el-dropdown-item>
-                    <el-dropdown-item>注销</el-dropdown-item>
+                    <el-dropdown-item divided>注销</el-dropdown-item>
                 </el-dropdown-menu>
             </el-dropdown>
         </el-header>
         <el-container class="content">
-            <el-aside width="200px" style="margin-left: -9px" default-active="2" class="el-menu-vertical-demo"
-                      >
+            <!--侧边栏-->
+            <el-aside width="200px" style="margin-left: -9px" default-active="2" class="el-menu-vertical-demo">
                 <!--unique-opened禁止多选打开-->
-                <el-menu router background-color="#545c64"
+                <el-menu router style="height: 100%" background-color="#545c64"
                          text-color="#fff"
                          active-text-color="#ffd04b">
                     <el-submenu :index="index+''" v-for="(item,index) in routes" v-if="!item.hidden"
@@ -32,9 +32,25 @@
                         </el-menu-item>
                     </el-submenu>
                 </el-menu>
-
             </el-aside>
-            <el-main>
+
+            <el-main style="width: 1732px;">
+                <el-breadcrumb separator-class="el-icon-arrow-right" v-if="this.$router.currentRoute.path!='/home'">
+                    <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
+                    <el-breadcrumb-item>{{ this.$router.currentRoute.name }}</el-breadcrumb-item>
+                </el-breadcrumb>
+                <div class="homeWelcome" v-if="this.$router.currentRoute.path=='/home'">
+                    <div class="box">
+                        <div id="myPieChart" :style="{top:'-30px', width: '600px', height: '400px'}"></div>
+                    </div>
+                    <div class="box">
+                        <div id="myHeatMap" :style="{top:'-30px', width: '600px', height: '400px'}"></div>
+                    </div>
+                    <div class="box">
+                        <div id="myChart" :style="{top:'-30px', width: '800px', height: '400px'}"></div>
+                    </div>
+                </div>
+
                 <router-view/>
             </el-main>
         </el-container>
@@ -44,26 +60,38 @@
 
 
 <script src="./_Home.js" lang="js"></script>
-<style  lang="less" scoped>
-  *{margin: 0;padding: 0;}
-  .nav{
+<style lang="less" scoped>
+  * {
+    margin: 0;
+    padding: 0;
+  }
+
+  .nav {
     height: 100px;
     width: 100%;
     position: fixed;
     top: 0;
   }
 
+  .homeWelcome {
+    text-align: center;
+    font-size: 30px;
+    font-family: 华文楷体;
+    color: #546475;
+    padding-top: 5px;
+  }
 
-  .homeHeader{
+  .homeHeader {
     background: #545c64;
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 0 15px;
-    box-sizing:border-box;
+    box-sizing: border-box;
     margin-left: -8px;
   }
-  .homeHeader .title{
+
+  .homeHeader .title {
     font-size: 30px;
     font-family: 华文楷体;
     color: white;
@@ -73,40 +101,55 @@
   //  color: #333;
   //}
 
-  .homeHeader .userInfo{
+  .homeHeader .userInfo {
     cursor: pointer;
   }
-  .el-dropdown-link img{
+
+  .el-dropdown-link img {
     width: 48px;
     height: 48px;
     border-radius: 24px;
   }
+
   .el-dropdown-link {
     display: flex;
     align-items: center;
   }
+
+  /*******************************侧边滑块样式**************************************/
   //侧边
-  .content{
+  .content {
     height: 100%;
     //background: orange;
     margin-top: 52px;
     position: fixed;
   }
+
   .el-menu-vertical-demo::-webkit-scrollbar {
     /*滚动条整体样式*/
-    width : 5px;  /*高宽分别对应横竖滚动条的尺寸*/
+    width: 5px; /*高宽分别对应横竖滚动条的尺寸*/
     height: 1px;
   }
+
   .el-menu-vertical-demo::-webkit-scrollbar-thumb {
     /*滚动条里面小方块*/
     border-radius: 5px;
-    box-shadow   : inset 0 0 5px rgba(196, 70, 70, 0.2);
-    background   : #545c64;
+    box-shadow: inset 0 0 5px rgba(196, 70, 70, 0.2);
+    background: #545c64;
   }
+
   .el-menu-vertical-demo::-webkit-scrollbar-track {
     /*滚动条里面轨道*/
-    box-shadow   : inset 0 0 5px rgba(0, 0, 0, 0.2);
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
     border-radius: 10px;
-    background   : #eef0f1;
+    background: #eef0f1;
+  }
+
+  /**********************************图表样式**************************************/
+  /*图表样式*/
+  .box {
+    margin-top: 50px;
+    left: 879px;
+    top: -63px;
   }
 </style>

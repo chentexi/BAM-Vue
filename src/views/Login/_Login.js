@@ -17,7 +17,7 @@ export default {
     data() {
         captchFlag = this.$uuid.v1();
         return {
-            captchaUrl: '/images/captchaPng?key=' + captchFlag,
+            captchaUrl: '/images/captchaCompute?key=' + captchFlag,
             loginForm: {
                 userName: 'admin',
                 passWord: '123',
@@ -48,13 +48,21 @@ export default {
     watch: {},
 
     created() {
+        // 按下回车执行登录按钮点击事件
+        var _self = this
+        document.onkeydown = function(e) {
+            var key = window.event.keyCode
+            if (key == 13) {
+                _self.submitLogin();
+            }
+        }
     },
 
     methods: {
         updateCaptcha() {
             captchFlag = this.$uuid.v1();
             this.loginForm.captchFlag = captchFlag;
-            this.captchaUrl = '/images/captchaPng?key=' + captchFlag;
+            this.captchaUrl = '/images/captchaCompute?key=' + captchFlag;
         },
         submitLogin() {
             this.$refs.loginForm.validate((valid) => {

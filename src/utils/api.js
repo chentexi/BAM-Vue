@@ -65,6 +65,14 @@ export const getRequest = (url, params) => {
         data: params
     })
 }
+//传递json的get请求
+export const getRequestNoJson = (url, params) => {
+    return axios({
+        method: 'get',
+        url: `${url}`,
+        data: params
+    })
+}
 //传递json的delete请求
 export const deleteRequest = (url, params) => {
     return axios({

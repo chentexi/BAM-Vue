@@ -1,7 +1,7 @@
 <template>
     <el-container>
         <el-header class="homeHeader nav">
-            <div class="title">后台管理系统</div>
+<!--            <div class="title">后台管理系统</div>-->
             <el-dropdown class="userInfo">
                   <span class="el-dropdown-link">
                     <!--<i><img :src="user.userFace"></i>-->
@@ -36,18 +36,29 @@
 
             <el-main style="width: 1732px;">
                 <el-breadcrumb separator-class="el-icon-arrow-right" v-if="this.$router.currentRoute.path!='/home'">
-                    <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
+                    <el-breadcrumb-item :to="{ path: '/home' }"><span @click="goToHome()">首页</span></el-breadcrumb-item>
                     <el-breadcrumb-item>{{ this.$router.currentRoute.name }}</el-breadcrumb-item>
                 </el-breadcrumb>
                 <div class="homeWelcome" v-if="this.$router.currentRoute.path=='/home'">
+                    <el-row :gutter="20">
+                        <el-col :span="6">
+                            <div class="grid-content bg-purple myClock">
+                                <div id="myClock" :style="{top:'10px',left:'10%', width: '450px', height: '400px'}"></div>
+                            </div>
+                        </el-col>
+                        <el-col :span="6">
+                            <div class="grid-content bg-purple">
+                                <div id="myPieChart" :style="{top:'50px',left:'1282px', width: '450px', height: '400px'}"></div>
+                            </div>
+                        </el-col>
+                        <el-col :span="6">
+                            <div class="grid-content bg-purple mapMaxMin">
+                                <div id="myHeatMap" class="myHeatMap" :style="{top:'0', width: '2300px', height: '600px'}"></div>
+                            </div>
+                        </el-col>
+                    </el-row>
                     <div class="box">
-                        <div id="myPieChart" :style="{top:'-30px', width: '600px', height: '400px'}"></div>
-                    </div>
-                    <div class="box">
-                        <div id="myHeatMap" :style="{top:'-30px', width: '600px', height: '400px'}"></div>
-                    </div>
-                    <div class="box">
-                        <div id="myChart" :style="{top:'-30px', width: '800px', height: '400px'}"></div>
+                        <div id="myChart" :style="{top:'0px', width: '900px', height: '400px'}"></div>
                     </div>
                 </div>
 
@@ -151,5 +162,29 @@
     margin-top: 50px;
     left: 879px;
     top: -63px;
+  }
+
+  .mapMaxMin {
+    position: absolute;
+    width: 55%;
+    height: 100%;
+    left: 20%;
+    overflow: hidden;
+    background-color: rgb(243, 241, 236);
+    color: rgb(0, 0, 0);
+    text-align: left;
+    z-index: 0;
+  }
+  .myClock{
+    position: absolute;
+    left: -75px;
+    top: 0px;
+    width: 470px;
+    height: 420px;
+    user-select: none;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    padding: 0px;
+    margin: 0px;
+    border-width: 0px;
   }
 </style>

@@ -7,23 +7,30 @@ import uuid from "vue-uuid"
 import store from './store/store'
 import 'font-awesome/css/font-awesome.min.css'
 import * as echarts from 'echarts'
-
+import BaiduMap from 'vue-baidu-map'
+// import 'echarts/extension/bmap/bmap'
+require('echarts/extension/bmap/bmap');
 
 Vue.config.productionTip = false
 // 安装ElementUI
 Vue.use(ElementUI)
 Vue.use(uuid)
+Vue.use(BaiduMap, {
+    ak: 'mDkz7jueNCfMBZBnyQsxsiMBHxFD7Nek'    //这个地方是官方提供的ak密钥
+})
 
 import {postRequest} from "./utils/api";
 import {putRequest} from "./utils/api";
 import {getRequest} from "./utils/api";
 import {deleteRequest} from "./utils/api";
+import {getRequestNoJson} from "./utils/api";
 import {initMenu} from "@/utils/menus";
 //插件
 Vue.prototype.postRequest = postRequest;
 Vue.prototype.putRequest = putRequest;
 Vue.prototype.getRequest = getRequest;
 Vue.prototype.deleteRequest = deleteRequest;
+Vue.prototype.getRequestNoJson = getRequestNoJson;
 Vue.prototype.$echarts = echarts
 
 router.beforeEach((to, from, next) => {

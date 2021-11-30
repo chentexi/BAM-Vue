@@ -1,7 +1,7 @@
 <template>
-    <el-container>
+    <el-container style="background-color: #755854">
         <el-header class="homeHeader nav">
-<!--            <div class="title">后台管理系统</div>-->
+            <!--            <div class="title">后台管理系统</div>-->
             <el-dropdown class="userInfo">
                   <span class="el-dropdown-link">
                     <!--<i><img :src="user.userFace"></i>-->
@@ -34,8 +34,8 @@
                 </el-menu>
             </el-aside>
 
-            <el-main style="width: 1732px;">
-                <el-breadcrumb separator-class="el-icon-arrow-right" v-if="this.$router.currentRoute.path!='/home'">
+            <el-main style="width: 1732px; background-color: #ffffff;">
+                <el-breadcrumb class="breadCrumbs" separator-class="el-icon-arrow-right"  v-if="this.$router.currentRoute.path!='/home'">
                     <el-breadcrumb-item :to="{ path: '/home' }"><span @click="goToHome()">首页</span></el-breadcrumb-item>
                     <el-breadcrumb-item>{{ this.$router.currentRoute.name }}</el-breadcrumb-item>
                 </el-breadcrumb>
@@ -52,16 +52,16 @@
                             </div>
                         </el-col>
                         <el-col :span="6">
-                            <div class="grid-content bg-purple mapMaxMin">
+                            <div class="grid-content bg-purple mapMaxMin" style="box-shadow: rgb(-4 6 -3 / 54%) 0px 2px 17px 6px">
                                 <div id="myHeatMap" class="myHeatMap" :style="{top:'0', width: '2300px', height: '600px'}"></div>
                             </div>
                         </el-col>
                     </el-row>
-                    <div class="box">
-                        <div id="myChart" :style="{top:'0px', width: '900px', height: '400px'}"></div>
+                    <div class="box" style="box-shadow: rgb(0 0 0 / 46%) 0px -1px 12px 1px">
+                        <div id="myChart" :style="{top:'0px', width: '100%', height: '400px'}"></div>
                     </div>
                 </div>
-
+                <br/>
                 <router-view/>
             </el-main>
         </el-container>
@@ -127,6 +127,13 @@
     align-items: center;
   }
 
+  /**********************************面包屑样式**************************************/
+  .breadCrumbs {
+    padding: 15px;
+    border-radius: 20px;
+    box-shadow:  rgb(0 0 0) 0px 0px 0px, rgb(0 0 0) 0px 3px 10px;
+  }
+
   /*******************************侧边滑块样式**************************************/
   //侧边
   .content {
@@ -175,7 +182,8 @@
     text-align: left;
     z-index: 0;
   }
-  .myClock{
+
+  .myClock {
     position: absolute;
     left: -75px;
     top: 0px;
@@ -187,4 +195,5 @@
     margin: 0px;
     border-width: 0px;
   }
+
 </style>

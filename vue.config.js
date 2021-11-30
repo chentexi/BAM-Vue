@@ -1,6 +1,6 @@
 let proxyObj = {}
 proxyObj['/'] = {
-    //websocket
+    //websockets
     ws: false,
     //目标地址
     target: 'http://localhost:8088',

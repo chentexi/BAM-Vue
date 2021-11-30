@@ -30,7 +30,7 @@ export default {
     created() {
     },
     mounted() {
-        window.onbeforeunload = e => {      //刷新时弹出提示
+        window.onbeforeunload = e => {      //刷新时弹出提示s
             this.myClockChart.value.clear();
             return ''
         };

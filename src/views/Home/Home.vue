@@ -131,7 +131,7 @@
   .breadCrumbs {
     padding: 15px;
     border-radius: 20px;
-    box-shadow:  rgb(0 0 0) 0px 0px 0px, rgb(0 0 0) 0px 3px 10px;
+    box-shadow:  rgb(0 0 0) 0px 0px 0px, rgb(0 0 0) 0px 0px 6px;
   }
 
   /*******************************侧边滑块样式**************************************/

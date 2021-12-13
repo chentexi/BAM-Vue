@@ -1,4 +1,10 @@
 // @vue/component
+import * as menu from "@/utils/menus";
+import * as home from "@/views/Home/_Home";
+import * as url from "url";
+import {getRequest} from "@/utils/api";
+import {formatRoutes} from "@/utils/menus";
+
 export default {
     name: 'Menu',
 
@@ -21,56 +27,8 @@ export default {
                 id:'menuId'
             },
             count: 1,
-            tableData: [{
-                date: '2016-05-02',
-                name: '王小虎',
-                province: '上海',
-                city: '普陀区',
-                address: '上海市普陀区金沙江路 1518 弄',
-                zip: 200333
-            }, {
-                date: '2016-05-04',
-                name: '王小虎',
-                province: '上海',
-                city: '普陀区',
-                address: '上海市普陀区金沙江路 1517 弄',
-                zip: 200333
-            }, {
-                date: '2016-05-01',
-                name: '王小虎',
-                province: '上海',
-                city: '普陀区',
-                address: '上海市普陀区金沙江路 1519 弄',
-                zip: 200333
-            }, {
-                date: '2016-05-03',
-                name: '王小虎',
-                province: '上海',
-                city: '普陀区',
-                address: '上海市普陀区金沙江路 1516 弄',
-                zip: 200333
-            }, {
-                date: '2016-05-04',
-                name: '王小虎',
-                province: '上海',
-                city: '普陀区',
-                address: '上海市普陀区金沙江路 1517 弄',
-                zip: 200333
-            }, {
-                date: '2016-05-01',
-                name: '王小虎',
-                province: '上海',
-                city: '普陀区',
-                address: '上海市普陀区金沙江路 1519 弄',
-                zip: 200333
-            }, {
-                date: '2016-05-03',
-                name: '王小虎',
-                province: '上海',
-                city: '普陀区',
-                address: '上海市普陀区金沙江路 1516 弄',
-                zip: 200333
-            }],
+            show:false,
+            tableData: [],
             nameMenu: '',
             startDate: '',
             endDate: ''
@@ -89,23 +47,75 @@ export default {
         onSubmit() {
             console.log('submit!');
         },
-        handleNodeClick(data) {
-            console.log(data);
-        },
-        handleCheckChange(data, checked, indeterminate) {
+        handleNodeClick(data, checked, indeterminate) {
             console.log(data, checked, indeterminate);
         },
         menuList(){
             console.log("ss")
             this.getRequest("/menu/menuList").then(data=>{
                 if (data){
-                    this.assemblyMenus(data);
                     this.data=data.data;
+                    this.tableData=data.data;
                 }
             })
         },
-        assemblyMenus(data) {
+        menuEdit(index,row){
 
-        }
+        },
+        menuDelete(index,row){
+            var id=row.menuId;
+            var url="/menu/delect?id="+id;
+            this.getRequest(url).then(data=>{
+                this.menuList();
+                if (data){
+
+                }
+            });
+
+        },
+        upadteEnable(callback, row){
+            let text = ''
+            let flag = false;
+            if (callback) {//修改启用之前是否确认修改
+                text = '启用'
+                row.enable = false
+                flag =true
+            } else {
+                text = '禁用'
+                row.enable = true
+                flag=false
+            }
+            this.$confirm(`确认${text}该流程吗`,'提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                iconClass: 'icon-warning',
+                customClass:'custom-message-box'
+            }).then(res=> {
+                row.enable=flag;
+
+            })
+        },
+        upadteVisible(callback, row){
+            let text = ''
+            let flag = false;
+            if (callback) {//修改启用之前是否确认修改
+                text = '显示'
+                row.visible = 1
+                flag =0
+            } else {
+                text = '隐藏'
+                row.visible = 0
+                flag=1
+            }
+            this.$confirm(`确认${text}该菜单吗`,'提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                iconClass: 'icon-warning',
+                customClass:'custom-message-box'
+            }).then(res=> {
+                row.visible=flag;
+
+            })
+        },
     }
 }

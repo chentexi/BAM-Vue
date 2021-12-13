@@ -2,9 +2,9 @@ import {getRequest} from "./api";
 import da from "element-ui/src/locale/lang/da";
 
 export const initMenu = (router, store) => {
-    if (store.state.routes.length > 0) {
-        return;
-    }
+    // if (store.state.routes.length > 0) {
+    //     return;
+    // }
     getRequest("/menu/menuList").then(data => {
         if (data) {
             //格式化router

@@ -317,7 +317,7 @@ export default {
 				if (data) {
 					this.data = data.data.data;
 					this.dataTree = data.data.data;
-					// this.allData = data.data.mainMenu;
+					this.allData = data.data.mainMenu;
 				}
 			})
 		},
@@ -464,9 +464,11 @@ export default {
 			if (node) {
 				this.$refs.addUpdateTree.setCurrentKey(key);
 				this.text = node.data.menuName;
+				// this.form.parentId=node.data.menuId;
 			} else {
 				this.$refs.addUpdateTree.setCurrentKey(null);
 				this.text = '';
+				// this.form.parentId='';
 			}
 		},
 		// 点击回调

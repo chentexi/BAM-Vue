@@ -1,0 +1,25 @@
+.add{
+    height: 40px;
+}
+
+.left{
+    float: right;
+}
+
+.titleFont{
+    font-size: 10px;
+}
+
+.inputWithe{
+    width: 350px;
+    height: 32px;
+    line-height: 32px;
+}
+.rowMarginTop{
+    margin-top: -20px
+}
+
+
+.frameCenter{
+    font-size:15px;  left: 300px;top: 20px
+}

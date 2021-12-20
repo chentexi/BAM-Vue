@@ -22,7 +22,7 @@
 						 text-color="#fff"
 						 active-text-color="#ffd04b">
 					<el-submenu :index="index+''" v-for="(item,index) in routes" v-if="!item.hidden"
-								:key="index">
+								:key="index" >
 						<template slot="title">
 							<i :class="[item.icon]" style="margin-right:6px"></i>
 							<span>{{item.name}}</span>
@@ -32,7 +32,7 @@
 									  :key="indexj">
 							{{children.name}}
 						</el-menu-item>
-						<el-submenu v-else :index="indexx+''">
+						<el-submenu v-else :index="index_y+''" >
 							<template slot="title">
 								<i :class="[children.icon]" style="margin-right:6px"></i>
 								<span>{{children.name}}</span>
@@ -54,15 +54,15 @@
 
 			<el-main style="width: 1732px; background-color: #ffffff;">
 				<el-breadcrumb class="breadCrumbs" separator-class="el-icon-arrow-right"
-							   v-if="this.$router.currentRoute.path!='/home'">
+							   v-if="this.$router.currentRoute.path!='/home'" >
 					<el-breadcrumb-item :to="{ path: '/home' }"><span @click="goToHome()">首页</span></el-breadcrumb-item>
 					<el-breadcrumb-item>{{this.$router.currentRoute.name}}</el-breadcrumb-item>
 				</el-breadcrumb>
-				<div class="homeWelcome" v-if="this.$router.currentRoute.path=='/home'">
+				<div class="homeWelcome" v-if="this.$router.currentRoute.path=='/home'" >
 					<el-row :gutter="20">
 						<el-col :span="6">
 							<div class="grid-content bg-purple myClock">
-								<div id="myClock"
+								<div id="myClock" ref="myClockRef"
 									 :style="{top:'10px',left:'10%', width: '450px', height: '400px'}"></div>
 							</div>
 						</el-col>

@@ -16,7 +16,9 @@ export default {
     data() {
         return {
             user: JSON.parse(window.sessionStorage.getItem('user')),
-            myClockChart:''
+            myClockChart: '',
+            index_y: null,
+            whetherShowEcharts: false
         }
     },
 
@@ -30,26 +32,29 @@ export default {
     created() {
     },
     mounted() {
+        if (this.$router.currentRoute.path=='/home') {
+            this.myClock();
+            this.myPieChart();
+            loadBMap().then(() => {
+                this.myHeatMap();
+            });
+            this.drawLine();
+        }
         window.onbeforeunload = e => {      //刷新时弹出提示s
             this.myClockChart.value.clear();
             return ''
         };
-        this.myClock();
-        this.myPieChart();
-        loadBMap().then(() => {
-            this.myHeatMap();
-        });
-        this.drawLine();
     },
     methods: {
         goToHome() {
             this.$router.replace('/home');
+            this.whetherShowEcharts=true;
             location.reload();
             // this.reload();
         },
         // this.initMenu();
         myClock(myChart) {
-            var myChart = this.$echarts.init(document.getElementById('myClock'));
+            var myChart = this.$echarts.init(this.$refs.myClockRef);
 
             var option;
             option = {
@@ -269,7 +274,7 @@ export default {
                     ]
                 });
             }, 1000);
-            option && myChart.setOption(option,true);
+            option && myChart.setOption(option, true);
         },
         drawLine() {
             // 基于准备好的dom，初始化echarts实例
@@ -305,9 +310,9 @@ export default {
                             label: {
                                 formatter: function (params) {
                                     return (
-                                        'Precipitation  ' +
-                                        params.value +
-                                        (params.seriesData.length ? '：' + params.seriesData[0].data : '')
+                                            'Precipitation  ' +
+                                            params.value +
+                                            (params.seriesData.length ? '：' + params.seriesData[0].data : '')
                                     );
                                 }
                             }
@@ -330,9 +335,9 @@ export default {
                             label: {
                                 formatter: function (params) {
                                     return (
-                                        'Precipitation  ' +
-                                        params.value +
-                                        (params.seriesData.length ? '：' + params.seriesData[0].data : '')
+                                            'Precipitation  ' +
+                                            params.value +
+                                            (params.seriesData.length ? '：' + params.seriesData[0].data : '')
                                     );
                                 }
                             }
@@ -413,7 +418,7 @@ export default {
                     }
                 ]
             };
-            option && eChartsType.setOption(option,true);
+            option && eChartsType.setOption(option, true);
         },
         //热力图
         myHeatMap() {
@@ -423,66 +428,66 @@ export default {
             var myChart = this.$echarts.init(document.getElementById('myHeatMap'));
             this.getRequestNoJson('/api/data/asset/data/hangzhou-tracks.json').then(data => {
                 var points = [].concat.apply(
-                    [],
-                    data.map(function (track) {
-                        return track.map(function (seg) {
-                            return seg.coord.concat([1]);
-                        });
-                    })
+                        [],
+                        data.map(function (track) {
+                            return track.map(function (seg) {
+                                return seg.coord.concat([1]);
+                            });
+                        })
                 );
                 myChart.setOption(
-                    (option = {
-                        animation: false,
-                        bmap: {
-                            center: [120.13066322374, 30.240018034923],
-                            zoom: 14,
-                            roam: true
-                        },
-                        query: {
-                            maxWidth: 500               // 当容器宽度小于 500 时。
-                        },
-                        itemStyle: {
-                            // 普通样式。
-                            normal: {
-                                // 点的颜色。
-                                color: 'red',
-                                width: 500,
-                                height: 4000
+                        (option = {
+                            animation: false,
+                            bmap: {
+                                center: [120.13066322374, 30.240018034923],
+                                zoom: 14,
+                                roam: true
                             },
-                            // 高亮样式。
-                            emphasis: {
-                                // 高亮时点的颜色。
-                                color: 'blue'
-                            }
-                        },
-                        visualMap: {
-                            show: false,
-                            top: 'top',
-                            min: 0,
-                            max: 5,
-                            seriesIndex: 0,
-                            calculable: true,
-                            inRange: {
-                                color: ['blue', 'blue', 'green', 'yellow', 'red']
-                            }
-                        },
-                        series: [
-                            {
-                                type: 'heatmap',
-                                coordinateSystem: 'bmap',
-                                data: points,
-                                pointSize: 10,
-                                blurSize: 10
-                            }
-                        ]
-                    })
+                            query: {
+                                maxWidth: 500               // 当容器宽度小于 500 时。
+                            },
+                            itemStyle: {
+                                // 普通样式。
+                                normal: {
+                                    // 点的颜色。
+                                    color: 'red',
+                                    width: 500,
+                                    height: 4000
+                                },
+                                // 高亮样式。
+                                emphasis: {
+                                    // 高亮时点的颜色。
+                                    color: 'blue'
+                                }
+                            },
+                            visualMap: {
+                                show: false,
+                                top: 'top',
+                                min: 0,
+                                max: 5,
+                                seriesIndex: 0,
+                                calculable: true,
+                                inRange: {
+                                    color: ['blue', 'blue', 'green', 'yellow', 'red']
+                                }
+                            },
+                            series: [
+                                {
+                                    type: 'heatmap',
+                                    coordinateSystem: 'bmap',
+                                    data: points,
+                                    pointSize: 10,
+                                    blurSize: 10
+                                }
+                            ]
+                        })
                 );
                 // 添加百度地图插件
                 var bmap = myChart.getModel().getComponent('bmap').getBMap();
                 bmap.addControl(new BMap.MapTypeControl());
             });
             if (option && typeof option === 'object') {
-                myChart.setOption(option,true);
+                myChart.setOption(option, true);
             }
         }
     }

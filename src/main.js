@@ -8,13 +8,17 @@ import store from './store/store'
 import 'font-awesome/css/font-awesome.min.css'
 import * as echarts from 'echarts'
 import BaiduMap from 'vue-baidu-map'
-// import 'echarts/extension/bmap/bmap'
+//引入图标选择器
+import iconPicker from 'vue-fontawesome-elementui-icon-picker';
+
+
 require('echarts/extension/bmap/bmap');
 
 Vue.config.productionTip = false
 // 安装ElementUI
 Vue.use(ElementUI)
 Vue.use(uuid)
+Vue.use(iconPicker)
 Vue.use(BaiduMap, {
     ak: 'mDkz7jueNCfMBZBnyQsxsiMBHxFD7Nek'    //这个地方是官方提供的ak密钥
 })
@@ -25,13 +29,18 @@ import {getRequest} from "./utils/api";
 import {deleteRequest} from "./utils/api";
 import {getRequestNoJson} from "./utils/api";
 import {initMenu} from "@/utils/menus";
+import Qs from "qs";
+//引入全局css
+import './assets/style/varibles.css'
+
 //插件
 Vue.prototype.postRequest = postRequest;
 Vue.prototype.putRequest = putRequest;
 Vue.prototype.getRequest = getRequest;
 Vue.prototype.deleteRequest = deleteRequest;
 Vue.prototype.getRequestNoJson = getRequestNoJson;
-Vue.prototype.$echarts = echarts
+Vue.prototype.$echarts = echarts;
+Vue.prototype.qs=Qs;
 
 router.beforeEach((to, from, next) => {
     console.log(to);

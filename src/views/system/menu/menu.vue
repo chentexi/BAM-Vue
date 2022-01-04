@@ -18,7 +18,8 @@
 							<!--<label class="fontName"> 结束时间: </label>-->
 							<!--<el-date-picker v-model="endDate" type="datetime" placeholder="选择日期时间"></el-date-picker>-->
 
-							<el-button class="inquireBtn" icon="el-icon-search" size="small" type="primary" @click="queryMenu">查询</el-button>
+							<el-button class="inquireBtnLeft1" icon="el-icon-search" size="small" type="primary" @click="queryMenu">查询</el-button>
+							<el-button class="inquireBtnLeft1" icon="el-icon-search" size="small" type="primary" @click="reset">重置</el-button>
 						</div>
 					</div>
 					<br/>
@@ -26,7 +27,7 @@
 						<div class="add" style="float: revert;margin-top: -6px;height: 40px">
 							<el-button type="primary" size="small" class="small" icon="el-icon-edit" @click="dialogFormVisible = true" round>新增</el-button>
 							<el-button-group class="left">
-								<el-button size="small" icon="el-icon-refresh"></el-button>
+								<el-button size="small" icon="el-icon-refresh" @click="queryMenu"></el-button>
 								<el-button size="small" icon="el-icon-s-grid"></el-button>
 							</el-button-group>
 						</div>
@@ -193,10 +194,7 @@
 			</el-dialog>
 		</div>
 	</div>
-
 </template>
-
-<!--<script src="./_menu.js" lang="js"></script>-->
 <script>
 export default {
 	name: 'Menu',
@@ -209,7 +207,8 @@ export default {
 
 	data() {
 		var validateText = (rule, value, callback) => {
-			if (this.text === '') {
+			var that = this;
+			if (that.text === '') {
 				callback(new Error('请选择上一级'));
 			} else {
 				callback();
@@ -293,52 +292,62 @@ export default {
 		this.handelSelect() //如果是从页面一开始进来，需要从这里触发（因为watch监测不到变化）
 	},
 	methods: {
+		reset() {
+			var that = this;
+			that.nameMenus = '';
+			that.startDate = '';
+			that.endDate = '';
+		},
 		onSubmit() {
 			console.log('submit!');
 		},
 		handleNodeClick(data) {
+			var that = this;
 			console.log(data);
 			var params = {
-				menuName:data.menuName
+				menuName: data.menuName
 			}
-			this.postRequest('/menu/menuLists',params).then(data=>{
-			    if (data){
-					this.data = data.data.data;
-			    }
+			that.postRequest('/menu/menuLists', params).then(data => {
+				if (data) {
+					that.data = data.data.data;
+				}
 			});
 		},
 		menuList() {
+			var that = this;
 			var params = {
-				menuName:'',
-				startDate:'',
-				endDate:''
+				menuName: '',
+				startDate: '',
+				endDate: ''
 			}
-			this.postRequest('/menu/menuLists',params).then(data => {
+			that.postRequest('/menu/menuLists', params).then(data => {
 				if (data) {
-					this.data = data.data.data;
-					this.dataTree = data.data.data;
-					this.allData = data.data.mainMenu;
+					that.data = data.data.data;
+					that.dataTree = data.data.data;
+					that.allData = data.data.mainMenu;
 				}
 			})
 		},
-		queryMenu(){
+		queryMenu() {
+			var that = this;
 			var params = {
-				menuName:this.nameMenus,
-				startDate:this.startDate,
-				endDate:this.endDate
+				menuName: that.nameMenus,
+				startDate: that.startDate,
+				endDate: that.endDate
 			}
-			this.postRequest('/menu/menuLists',params).then(data => {
+			that.postRequest('/menu/menuLists', params).then(data => {
 				if (data) {
-					this.data = data.data.data;
-					// this.dataTree = data.data.data;
-					// this.allData = data.data.mainMenu;
+					that.data = data.data.data;
+					// that.dataTree = data.data.data;
+					// that.allData = data.data.mainMenu;
 				}
 			})
 		},
 		menuEdit(index, row) {
-			this.whetherUpdate = true;
-			this.dialogFormVisible = true;
-			this.form = {
+			var that = this;
+			that.whetherUpdate = true;
+			that.dialogFormVisible = true;
+			that.form = {
 				menuName: row.menuName,
 				enable: row.enable,
 				menuType: row.menuType,
@@ -351,19 +360,21 @@ export default {
 				parentId: row.parentId,
 				menuId: row.menuId
 			};
-			this.handelSelect(row.parentId);
+			that.handelSelect(row.parentId);
 		},
 		menuDelete(index, row) {
+			var that = this;
 			var id = row.menuId;
 			var url = "/menu/delect?id=" + id;
-			this.getRequest(url).then(data => {
-				this.menuList();
+			that.getRequest(url).then(data => {
+				that.menuList();
 				if (data) {
 
 				}
 			});
 		},
 		upadteEnable(callback, row) {
+			var that = this;
 			let text = ''
 			let flag = false;
 			if (callback) {//修改启用之前是否确认修改
@@ -375,22 +386,22 @@ export default {
 				row.enable = true
 				flag = 0
 			}
-			this.$confirm(`确认${text}该菜单吗`, '提示', {
+			that.$confirm(`确认${text}该菜单吗`, '提示', {
 				confirmButtonText: '确定',
 				cancelButtonText: '取消',
 				iconClass: 'icon-warning',
 				customClass: 'custom-message-box'
 			}).then(res => {
 				row.enable = flag;
-				var json = this.qs.stringify({
+				var json = that.qs.stringify({
 					menuId: row.menuId,
 					enable: flag
 				})
-				this.postRequest('/menu/updateEnable', json).then(data => {
+				that.postRequest('/menu/updateEnable', json).then(data => {
 					if (data.status) {
-						this.menuList();
+						that.menuList();
 					} else {
-						this.$message({
+						that.$message({
 							// showClose: true,
 							message: data.msg,
 							center: true,
@@ -401,6 +412,7 @@ export default {
 			})
 		},
 		upadteVisible(callback, row) {
+			var that = this;
 			let text = ''
 			let flag = false;
 			if (callback) {//修改启用之前是否确认修改
@@ -412,22 +424,22 @@ export default {
 				row.visible = 0
 				flag = 1
 			}
-			this.$confirm(`确认${text}该菜单吗`, '提示', {
+			that.$confirm(`确认${text}该菜单吗`, '提示', {
 				confirmButtonText: '确定',
 				cancelButtonText: '取消',
 				iconClass: 'icon-warning',
 				customClass: 'custom-message-box'
 			}).then(res => {
-				var json = this.qs.stringify({
+				var json = that.qs.stringify({
 					menuId: row.menuId,
 					visible: flag
 				})
-				this.postRequest('/menu/updateVisible', json).then(data => {
+				that.postRequest('/menu/updateVisible', json).then(data => {
 					if (data.status) {
-						this.menuList();
+						that.menuList();
 						// row.visible=flag;
 					} else {
-						this.$message({
+						that.$message({
 							message: data.msg,
 							center: true,
 							type: "error"
@@ -438,65 +450,71 @@ export default {
 		},
 
 		clear() {
-			this.$refs.addUpdateTree.setCurrentKey(null)
-			this.text = ''
+			var that = this;
+			that.$refs.addUpdateTree.setCurrentKey(null)
+			that.text = ''
 		},
 		treeFilter(val) {
-			this.visible = true
-			this.$refs.addUpdateTree.filter(val)
+			var that = this;
+			that.visible = true
+			that.$refs.addUpdateTree.filter(val)
 			if (val == '') {
-				this.$refs.addUpdateTree.setCurrentKey(null)
+				that.$refs.addUpdateTree.setCurrentKey(null)
 			}
 		},
 		// 下拉框关闭
 		hidePopover() {
-			let node = this.$refs.addUpdateTree.getCurrentNode()
-			// this.$refs.tree.filter('')
+			var that = this;
+			let node = that.$refs.addUpdateTree.getCurrentNode()
+			// that.$refs.tree.filter('')
 			if (node) {
-				this.text = node.menuName
+				that.text = node.menuName
 			} else {
-				this.text = ''
+				that.text = ''
 			}
 		},
 		// 默认选中
 		handelSelect(key) {
-			let node = this.$refs.addUpdateTree.getNode(key);
+			var that = this;
+			let node = that.$refs.addUpdateTree.getNode(key);
 			if (node) {
-				this.$refs.addUpdateTree.setCurrentKey(key);
-				this.text = node.data.menuName;
-				// this.form.parentId=node.data.menuId;
+				that.$refs.addUpdateTree.setCurrentKey(key);
+				that.text = node.data.menuName;
+				// that.form.parentId=node.data.menuId;
 			} else {
-				this.$refs.addUpdateTree.setCurrentKey(null);
-				this.text = '';
-				// this.form.parentId='';
+				that.$refs.addUpdateTree.setCurrentKey(null);
+				that.text = '';
+				// that.form.parentId='';
 			}
 		},
 		// 点击回调
 		selectHandleNodeClick(node) {
+			var that = this;
 			if (node.disable) {
 				return false;
 			}
-			this.visible = false;
-			this.text = node.menuName;
-			this.form.parentId = node.menuId;
-			console.log(this.$refs.addUpdateTree.getCurrentNode());
+			that.visible = false;
+			that.text = node.menuName;
+			that.form.parentId = node.menuId;
+			console.log(that.$refs.addUpdateTree.getCurrentNode());
 		},
 
 		addUpdateMenu() {
-			this.$refs.addMenu.validate((valid) => {
+			var that= this;
+			that.$refs.addMenu.validate((valid) => {
 				if (valid) {
-					var url = this.whetherUpdate ? '/menu/updateMenu' : '/menu/addMenu';
-					this.postRequest(url, this.form).then(data => {
+					var url = that.whetherUpdate ? '/menu/updateMenu' : '/menu/addMenu';
+					that.postRequest(url, that.form).then(data => {
 						if (data.status) {
-							this.$message({
+							that.$message({
 								message: data.msg,
 								center: true,
 								type: 'info'
 							});
-							this.dialogFormVisible = false;
-							this.menuList();
+							that.dialogFormVisible = false;
+							that.menuList();
 						} else {
-							this.$message({
+							that.$message({
 								message: data.msg,
 								center: true,
 								type: 'error'
@@ -504,7 +522,7 @@ export default {
 						}
 					})
 				} else {
-					this.$message.error('请输入所有字段');
+					that.$message.error('请输入所有字段');
 					return false;
 				}
 			})

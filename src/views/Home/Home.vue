@@ -8,7 +8,7 @@
                      <i><img src="@/icon/user/headPortraits/1637301923-20211122015041705.jpg"></i>
                   </span>
 				<el-dropdown-menu slot="dropdown">
-					<el-dropdown-item>个人中心</el-dropdown-item>
+					<el-dropdown-item >个人中心</el-dropdown-item>
 					<el-dropdown-item>设置</el-dropdown-item>
 					<el-dropdown-item divided>注销</el-dropdown-item>
 				</el-dropdown-menu>
@@ -24,22 +24,22 @@
 					<el-submenu :index="index+''" v-for="(item,index) in routes" v-if="!item.hidden"
 								:key="index" >
 						<template slot="title">
-							<i :class="[item.icon]" style="margin-right:6px"></i>
-							<span>{{item.name}}</span>
+							<i :class="[item.icon]" style="margin-right:5px"></i>
+							<span class="font-menu">{{item.name}}</span>
 						</template>
 						<el-menu-item v-if="children.children.length==0" style="min-width: 179px" :index="children.path"
 									  v-for="(children,indexj) in item.children"
-									  :key="indexj">
+									  :key="indexj" class="font-menu">
 							{{children.name}}
 						</el-menu-item>
 						<el-submenu v-else :index="index_y+''" >
 							<template slot="title">
 								<i :class="[children.icon]" style="margin-right:6px"></i>
-								<span>{{children.name}}</span>
+								<span class="font-menu">{{children.name}}</span>
 							</template>
 							<el-menu-item style="min-width: 179px" :index="childrenSub.path"
 										  v-for="(childrenSub,indexi) in children.children"
-										  :key="indexi">{{childrenSub.name}}
+										  :key="indexi" class="font-menu">{{childrenSub.name}}
 							</el-menu-item>
 						</el-submenu>
 

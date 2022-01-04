@@ -23,3 +23,63 @@
 .frameCenter{
     font-size:15px;  left: 300px;top: 20px
 }
+
+.mainClass {
+    top:10px;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 7px rgba(0, 0, 0, .55), 0 0 6px rgba(0, 0, 0, .04);
+    height: 83%;
+}
+
+
+.fontName{
+    font-size: 12px;
+}
+.addPosInput {
+    width: 150px;
+    margin-right: 3px;
+    height: 10px;
+}
+.inputWidth5{
+    width: 150px;
+}
+.inquireBtnLeft1{
+    margin-left: 5px;
+}
+.inquireBtnLeft2{
+    margin-left: 10px;
+}
+.inquireBtnLeft3{
+    margin-left: 15px;
+}
+.inquireBtnLeft4{
+    margin-left: 20px;
+}
+.inquireBtnRight1{
+    margin-right: 5px;
+}
+.inquireBtnRight2{
+    margin-right: 10px;
+}
+.inquireBtnRight3{
+    margin-right: 15px;
+}
+.inquireBtnRight4{
+    margin-right: 20px;
+}
+.tableHeight{
+    height: 625px;
+}
+.tableWidth{
+    width: 120%;
+}
+boby,font{
+    font-size: 12px;
+}
+font-menu{
+    font-size:14px;
+}
+.el-table .cell {
+    white-space: pre-line;
+}

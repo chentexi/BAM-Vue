@@ -24,8 +24,12 @@
 								新增
 							</el-button>
 							<el-button type="primary" size="small" class="small" @click="toggleSelection()" round>
-								<i class="fontName fa fa-check-square-o inquireBtnRight1"></i>
+								<i class="fontName fa fa-calendar-times-o inquireBtnRight1"></i>
 								取消选择
+							</el-button>
+							<el-button type="primary" size="small" class="small" @click="delSelectIds()" round>
+								<i class="fontName fa fa-trash-o inquireBtnRight1"></i>
+								删除
 							</el-button>
 							<el-button-group class="left">
 								<el-button size="small" icon="el-icon-refresh " @click="findAdminAll"></el-button>
@@ -35,6 +39,7 @@
 						<div>
 							<el-table
 									ref="multipleTable"
+									@selection-change="selectRowChange"
 									:data="tableData"
 									height="520"
 									border
@@ -60,7 +65,7 @@
 								<el-table-column
 										prop="name"
 										label="姓名"
-										show-overflow-tooltip="true"
+										:show-overflow-tooltip="true"
 										width="100">
 								</el-table-column>
 								<el-table-column
@@ -94,10 +99,10 @@
 										label="是否启用">
 									<template slot-scope="scope">
 										<el-switch
-												v-model="scope.row.enabled==0?true:false"
+												v-model="scope.row.enabled==0?false:true"
 												active-color="#13ce66"
 												inactive-color="#ff4949"
-												@change="upadteEnabled($event,scope.row)">
+												@change="updateEnabled($event,scope.row)">
 										</el-switch>
 									</template>
 								</el-table-column>
@@ -115,12 +120,12 @@
 									<template slot-scope="scope">
 										<el-button
 												size="mini"
-												@click="xxx(scope.$index, scope.row)">编辑
+												@click="updateUser(scope.$index, scope.row)"><i class="fontName fa fa-edit inquireBtnRight1"></i>编辑
 										</el-button>
 										<el-button
 												size="mini"
 												type="danger"
-												@click="xxx(scope.$index, scope.row)">删除
+												@click="delUser(scope.$index, scope.row)"> <i class="fontName fa fa-trash-o inquireBtnRight1"></i>删除
 										</el-button>
 									</template>
 								</el-table-column>
@@ -141,7 +146,7 @@
 		</el-row>
 		<div>
 			<el-dialog class="titleFont frameCenter" :title="whetherUpdate?'用户编辑':'用户新增'" :modal="false" :show-close="true" :close-on-click-modal="false" :visible.sync="dialogFormVisible">
-				<el-form :rules="rules" ref="addMenu" :model="form" :inline="false" label-width="120px" class="demo-form-inline">
+				<el-form :rules="rules" ref="addUpdateForm" :model="form" :inline="false" label-width="120px" class="demo-form-inline">
 					<el-form-item label="用户头像:" ref="uploadElement" prop="image">
 						<!--<el-input v-model="goods.image" v-if="false"></el-input>-->
 						<!--<el-upload-->
@@ -163,6 +168,7 @@
 								class="avatar-uploader"
 								action=""
 								:show-file-list="false"
+								:auto-upload="true"
 								:on-success="handleAvatarSuccess"
 								:before-upload="beforeAvatarUpload">
 							<el-image v-if="imageUrl" :src="imageUrl" class="avatar" :fit="cover"></el-image>
@@ -171,46 +177,46 @@
 					</el-form-item>
 					<el-row :gutter="0">
 						<el-col :span="10">
-							<el-form-item label="用户名:">
-								<el-input class="inputWithe" size="medium"></el-input>
+							<el-form-item label="用户名:" prop="name">
+								<el-input class="inputWithe" size="medium" v-model="form.name"></el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :span="10">
-							<el-form-item label="用户昵称:">
-								<el-input class="inputWithe" size="medium"></el-input>
+							<el-form-item label="用户昵称:" prop="nickName">
+								<el-input class="inputWithe" size="medium" v-model="form.nickName"></el-input>
 							</el-form-item>
 						</el-col>
 					</el-row>
 
 					<el-row :gutter="0">
 						<el-col :span="10">
-							<el-form-item label="手机号:">
-								<el-input class="inputWithe" size="medium"></el-input>
+							<el-form-item label="手机号:" prop="phone">
+								<el-input class="inputWithe" size="medium" v-model="form.phone"></el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :span="10">
-							<el-form-item label="邮箱:">
-								<el-input class="inputWithe" size="medium"></el-input>
+							<el-form-item label="邮箱:" prop="email">
+								<el-input class="inputWithe" size="medium" v-model="form.email"></el-input>
 							</el-form-item>
 						</el-col>
 					</el-row>
 					<el-row :gutter="0">
 						<el-col :span="10">
-							<el-form-item label="性别:" >
-								<div >
-									<el-radio v-model="radio" label="1">男</el-radio>
-									<el-radio v-model="radio" label="0">女</el-radio>
+							<el-form-item label="性别:" prop="gender">
+								<div>
+									<el-radio v-model="form.gender" label="1">男</el-radio>
+									<el-radio v-model="form.gender" label="0">女</el-radio>
 								</div>
 							</el-form-item>
 						</el-col>
-						<el-col :span="10">
-							<div>
-							<el-form-item label="是否启用:">
-								<el-switch style="height: 40px" active-color="#13ce66"
-										   inactive-color="#ff4949" active-value="1" inactive-value="0"></el-switch>
-							</el-form-item>
-							</div>
-						</el-col>
+						<!--<el-col :span="10">-->
+						<!--	<div>-->
+						<!--		<el-form-item label="是否启用:" prop="enabled">-->
+						<!--			<el-switch style="height: 40px" v-model="form.enabled"  active-color="#13ce66"-->
+						<!--					   inactive-color="#ff4949" active-value="true" inactive-value="false"></el-switch>-->
+						<!--		</el-form-item>-->
+						<!--	</div>-->
+						<!--</el-col>-->
 					</el-row>
 
 
@@ -239,13 +245,34 @@ export default {
 			currentPage: 1, //初始页
 			pageSize: 10,    //    每页的数据
 			tableData: [],
-			total: '',
+			total: 0,
 			name: '',
 			startDateTime: '',
 			endDateTime: '',
 			whetherUpdate: false,
 			dialogFormVisible: false,//是否显示弹窗
-			imageUrl: ''
+			imageUrl: '',
+			delIds: '',
+			selectIds:'',
+			form: {
+				name: '',
+				nickName: '',
+				gender: 0,
+				email: '',
+				phone: '',
+				// enabled: 'true',
+			},
+			rules: {
+				name: [{
+					required: true, message: '用户名不能为空!', trigger: 'blur'
+				}],
+				phone: [{
+					required: true, message: '手机号不能为空!', trigger: 'blur',style:"line-height: 2"
+				}],
+				email: [{
+					required: true, message: '邮箱不能为空!', trigger: 'blur'
+				}]
+			}
 		}
 	},
 
@@ -260,7 +287,18 @@ export default {
 		this.findAdminAll(this.currentPage, this.pageSize);
 	},
 	methods: {
+		selectRowChange(rows) {
+			var that = this;
+			for (var i = 0; i < rows.length; i++) {
+				var id = rows[i].id;
+				if (that.selectIds.indexOf(id)==-1){
+					that.selectIds+=id+',';
+				}
+			}
+			console.log('rows:' + that.selectIds);
+		},
 		toggleSelection(rows) {
+			this.$refs.multipleTable.to
 			if (rows) {
 				rows.forEach(row => {
 					this.$refs.multipleTable.toggleRowSelection(row);
@@ -274,7 +312,6 @@ export default {
 		},
 		// 初始页currentPage、初始每页数据数pagesize和数据data
 		handleSizeChange: function (size) {
-			debugger;
 			this.pageSize = size;
 			this.findAdminAll();
 			console.log(this.pageSize)  //每页下拉显示数据
@@ -284,16 +321,42 @@ export default {
 			this.findAdminAll();
 			console.log(this.currentPage)  //点击第几页
 		},
-		upadteEnabled(callback, row) {
+		updateEnabled(callback, row) {
 			var that = this;
-			var params = that.qs.stringify({
-				id: row.id,
-			})
-			that.postRequest('/user/updateEnabled', params).then(data => {
-				if (data) {
-
+			let text = ''
+			let flag = false;
+			if (callback) {//修改启用之前是否确认修改
+				text = '启用'
+				row.enable = false
+				flag = 1
+			} else {
+				text = '禁用'
+				row.enable = true
+				flag = 0
+			}
+			that.$confirm(`确认${text}该用户吗`, '提示', {
+				confirmButtonText: '确定',
+				cancelButtonText: '取消',
+				iconClass: 'icon-warning',
+				customClass: 'custom-message-box'
+			}).then(res => {
+				row.enable = flag;
+				var json = {
+					id: row.id,
+					enable2: flag
 				}
-			});
+				that.postRequest('/user/updateEnabled', json).then(data => {
+					if (data.status) {
+						that.findAdminAll();
+					} else {
+						that.$message({
+							message: data.msg,
+							center: true,
+							type: 'error'
+						});
+					}
+				})
+			})
 		},
 		resetForm() {
 			this.name = '';
@@ -310,7 +373,6 @@ export default {
 				pageSize: that.pageSize
 			}
 			that.postRequest('/user/findAdmin', params).then(data => {
-				debugger
 				if (data) {
 					this.tableData = data.data.list;
 					that.total = data.data.total;
@@ -345,6 +407,7 @@ export default {
 			this.imageUrl = URL.createObjectURL(file.raw);
 		},
 		beforeAvatarUpload(file) {
+			var that = this;
 			const isJPG = file.type === 'image/jpeg';
 			const isLt2M = file.size / 1024 / 1024 < 2;
 
@@ -354,7 +417,116 @@ export default {
 			if (!isLt2M) {
 				this.$message.error('上传头像图片大小不能超过 2MB!');
 			}
+
+			var params = {
+				file: file
+			};
+			that.postRequest('', params).then(data => {
+				if (data) {
+					this.tableData = data.data.list;
+					that.total = data.data.total;
+				}
+			});
 			return isJPG && isLt2M;
+		},
+		delUser(index, row) {
+			var id = row.id;
+			this.delUserByIds(id);
+		},
+
+		delSelectIds() {
+			var that = this;
+			that.selectIds.substring(0, that.selectIds.length - 1);
+			this.$confirm('此操作将永久删除选中的数据, 是否继续?', '提示', {
+				confirmButtonText: '确定',
+				cancelButtonText: '取消',
+				type: 'warning'
+			}).then(() => {
+				that.delUserByIds(that.selectIds);
+			}).catch(() => {
+				that.$message({
+					type: 'info',
+					message: '已取消删除'
+				});
+			});
+		},
+		delUserByIds(ids) {
+			var that = this;
+			var params = {
+				ids: ids
+			};
+			that.postRequest('/user/delUserById', that.qs.stringify(params)).then(data => {
+				if (data.status) {
+					that.$message({
+						type: 'success',
+						message: data.msg
+					});
+					that.findAdminAll();
+				} else {
+					that.$message({
+						type: 'info',
+						message: data.msg
+					})
+				}
+			});
+		},
+		updateUser(index,row){
+			var that =this;
+			debugger
+			that.form={
+				name:row.name,
+				nickName:row.nickName,
+				phone:row.phone,
+				email:row.email,
+				// enabled:row.enabled,
+				gender:row.gender,
+				id:row.id,
+			};
+			that.whetherUpdate=true;
+			that.dialogFormVisible=true;
+		},
+		addUpdateMenu() {
+			var that = this;
+			that.$refs.addUpdateForm.validate((valid) => {
+				if (valid) {
+					var params = {};
+					debugger
+					var url= that.whetherUpdate?'/user/updateAdmin':'/user/addAdmin';
+					that.postRequest(url, that.form).then(data => {
+						if (data.status) {
+							that.$message({
+								message: data.msg,
+								center: true,
+								type: 'info'
+							});
+							that.dialogFormVisible = false;
+							that.findAdminAll();
+						} else {
+							that.$message({
+								message: data.msg,
+								center: true,
+								type: 'error'
+							});
+						}
+					});
+				} else {
+					that.$message.error('请输入所有字段');
+					return false;
+				}
+			});
+		},
+		changeEnabled(callback){
+			var that = this;
+			let text = ''
+			let flag = 0;
+			if (callback) {//修改启用之前是否确认修改
+				text = '启用'
+				flag = true
+			} else {
+				text = '禁用'
+				flag = false
+			}
+			that.form.enabled=flag;
 		}
 	}
 }

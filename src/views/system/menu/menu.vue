@@ -476,15 +476,17 @@ export default {
 		// 默认选中
 		handelSelect(key) {
 			var that = this;
-			let node = that.$refs.addUpdateTree.getNode(key);
-			if (node) {
-				that.$refs.addUpdateTree.setCurrentKey(key);
-				that.text = node.data.menuName;
-				// that.form.parentId=node.data.menuId;
-			} else {
-				that.$refs.addUpdateTree.setCurrentKey(null);
-				that.text = '';
-				// that.form.parentId='';
+			if (key!=null) {
+				let node = that.$refs.addUpdateTree.getNode(key);
+				if (node) {
+					that.$refs.addUpdateTree.setCurrentKey(key);
+					that.text = node.data.menuName;
+					// that.form.parentId=node.data.menuId;
+				} else {
+					that.$refs.addUpdateTree.setCurrentKey(null);
+					that.text = '';
+					// that.form.parentId='';
+				}
 			}
 		},
 		// 点击回调

@@ -58,6 +58,7 @@ export default {
     methods: {
         updateCaptcha() {
             captchFlag = this.$uuid.v1();
+            debugger
             this.loginForm.captchFlag = captchFlag;
             this.captchaUrl = '/images/captchaCompute?key=' + captchFlag;
         },

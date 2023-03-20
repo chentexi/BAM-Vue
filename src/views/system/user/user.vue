@@ -375,7 +375,7 @@ export default {
 				currentPage: that.currentPage,
 				pageSize: that.pageSize
 			}
-			that.postRequest('/user/findAdmin', params).then(data => {
+			that.postRequest('/user/findUser', params).then(data => {
 				if (data) {
 					this.tableData = data.data.list;
 					that.total = data.data.total;
@@ -494,7 +494,7 @@ export default {
 				if (valid) {
 					var params = {};
 					debugger
-					var url= that.whetherUpdate?'/user/updateAdmin':'/user/addAdmin';
+					var url= that.whetherUpdate?'/user/updateUser':'/user/addUser';
 					that.postRequest(url, that.form).then(data => {
 						if (data.status) {
 							that.$message({
